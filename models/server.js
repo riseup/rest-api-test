@@ -1,5 +1,6 @@
-const express = require("express");
 const os = require("os");
+const express = require("express");
+const cors = require("cors");
 
 class Server {
   constructor() {
@@ -15,6 +16,8 @@ class Server {
   middleware() {
     // Lectura y parseo del body
     this.app.use(express.json());
+    // CORS
+    this.app.use(cors());
   }
 
   routes() {
