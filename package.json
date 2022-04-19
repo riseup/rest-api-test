@@ -1,18 +1,18 @@
 {
-  "name": "ejemplo-rest-server",
+  "name": "demo-rest-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "API express.js para propositos demostrativos",
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:all",
     "seed-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo",
     "migrate": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate",
-    "migrate-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo"
+    "migrate-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sebastian Barroso",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
