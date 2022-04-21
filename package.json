@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node .",
     "seed": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:all",
-    "seed-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo",
+    "seed-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo:all",
     "migrate": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate",
-    "migrate-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo",
+    "migrate-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,10 +22,13 @@
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.19.0",
-    "sqlite3": "^5.0.4"
+    "sqlite3": "^5.0.4",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "dotenv-cli": "^5.1.0",
+    "postman-to-openapi": "^2.2.1",
     "sequelize-cli": "^6.4.1"
   }
 }

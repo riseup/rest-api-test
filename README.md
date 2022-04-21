@@ -18,3 +18,7 @@ npm run migrate
 ```
 npm run seed
 ```
+
+[Demo](https://demo-rest-server.herokuapp.com/api/todo)
+
+[OpenAPI](https://demo-rest-server.herokuapp.com/api/docs/)
