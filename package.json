@@ -10,7 +10,10 @@
     "db:seed:undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo:all",
     "db:migrate": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo:all",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:s": "npm test -- --silent",
+    "test:v": "npm test -- --verbose",
+    "test:o": "npm test -- --detectOpenHandles"
   },
   "keywords": [],
   "author": "Sebastian Barroso",
@@ -28,9 +31,12 @@
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "dotenv-cli": "^5.1.0",
+    "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "postman-to-openapi": "^2.2.1",
-    "sequelize-cli": "^6.4.1"
+    "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.2"
   }
 }
