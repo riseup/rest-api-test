@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
+    "dev": "nodemon .",
     "db:seed": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:all",
     "db:seed:undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo:all",
     "db:migrate": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "dotenv-cli": "^5.1.0",
+    "nodemon": "^2.0.15",
     "postman-to-openapi": "^2.2.1",
     "sequelize-cli": "^6.4.1"
   }
