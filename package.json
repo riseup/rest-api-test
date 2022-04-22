@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "seed": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:all",
-    "seed-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo:all",
-    "migrate": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate",
-    "migrate-undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo:all",
+    "db:seed": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:all",
+    "db:seed:undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:seed:undo:all",
+    "db:migrate": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate",
+    "db:migrate:undo": "./node_modules/.bin/dotenv -e .env ./node_modules/.bin/sequelize db:migrate:undo:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
