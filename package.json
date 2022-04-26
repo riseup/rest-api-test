@@ -1,8 +1,20 @@
 {
-  "name": "demo-rest-server",
+  "name": "rest-api-test",
   "version": "1.0.0",
-  "description": "API express.js para propositos demostrativos",
+  "description": "expressjs testing con jest y supertest",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riseup/rest-api-test"
+  },
+  "keywords": [
+    "expressjs",
+    "jest",
+    "test",
+    "supertest"
+  ],
+  "author": "Sebastian Barroso",
+  "license": "ISC",
   "scripts": {
     "start": "node .",
     "dev": "nodemon .",
@@ -15,11 +27,7 @@
     "test:v": "npm test -- --verbose",
     "test:o": "npm test -- --detectOpenHandles",
     "test:w": "npm test -- --watch"
-
   },
-  "keywords": [],
-  "author": "Sebastian Barroso",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
