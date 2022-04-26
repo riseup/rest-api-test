@@ -13,7 +13,9 @@
     "test": "jest",
     "test:s": "npm test -- --silent",
     "test:v": "npm test -- --verbose",
-    "test:o": "npm test -- --detectOpenHandles"
+    "test:o": "npm test -- --detectOpenHandles",
+    "test:w": "npm test -- --watch"
+
   },
   "keywords": [],
   "author": "Sebastian Barroso",
