@@ -1,10 +1,11 @@
-require("dotenv").config();
+
 
 const encodings = require("./../../node_modules/iconv-lite/encodings");
 const iconvLite = require("./../../node_modules/iconv-lite/lib");
 iconvLite.getCodec("UTF-8");
 
-const { myServer } = require("../../index");
+const Server = require("../../lib/models/server");
+const myServer = new Server();
 const { app, paths, server } = myServer;
 const supertest = require("supertest");
 
@@ -54,7 +55,7 @@ jest.mock("../../lib/services/todo", () => {
 });
 
 afterAll(() => {
-  server.close();
+  // server.close();
 });
 
 beforeEach(() => {

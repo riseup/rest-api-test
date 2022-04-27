@@ -13,13 +13,13 @@ Segun como se encuentre definida la variable `NODE_ENV` se conectará a cada tip
 - `NODE_ENV=test`: DB sqlite3
 - `NODE_ENV=production`: DB postgreSQL
 
-#### Instalación de dependencias
+### Instalación de dependencias
 ```
 npm i                     # Instalación de dependencias
 cp ejemplo.env .env       # Variables de entorno incluida NODE_ENV
 ```
 
-#### Creación de DB local para desarrollo y testing
+### Creación de DB local para desarrollo y testing
 Para la creación local de la DB, debe estar asignada la siguiente variable `NODE_ENV=development`
 ```
 npm run db:migrate        # Crea la tabla to_do
@@ -27,7 +27,7 @@ npm run db:seed           # Inserta 3 registros en la DB
 ```
 En el caso de utilizar `NODE_ENV=production`, se debe completar los datos en el `.env` para realizar la conexión a la DB
 
-#### Test scripts
+### Test scripts
 Todos usan jest
 ```
 npm run test              # Solo jest
@@ -37,17 +37,17 @@ npm run test:v            # verbose
 npm run test:s            # silent
 ```
 
-#### Dev script
+### Dev script
 ```
 npm run dev               # nodemon
 ```
 
-#### Start script
+### Start script
 ```
 npm start                 # start
 ```
 
-#### Otros scripts
+### Otros scripts
 ```
 npm db:seed:undo          # Elimina todos los registros de la tabla to_do
 npm db:migrate:undo       # Elimina la tabla to_do
