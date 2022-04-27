@@ -1,5 +1,3 @@
-// const { myServer } = require("../../index");
-// const { app, paths, server } = myServer;
 const Server = require("../../lib/models/server");
 const myServer = new Server();
 const { app, paths, server } = myServer;
@@ -15,9 +13,6 @@ const mockResponseHome = {
   docs_json: expect.any(String)
 };
 
-afterAll(() => {
-  // server.close();
-});
 
 describe("/", () => {
   describe("get root route", () => {

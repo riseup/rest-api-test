@@ -3,7 +3,7 @@ const myServer = new Server();
 const { app, paths } = myServer;
 const supertest = require("supertest");
 
-describe("docs", () => {
+describe("/docs", () => {
   describe("get docs route", () => {
     describe("given the user input to the openapi url", () => {
       it("should redirect with 301 to an html", async () => {

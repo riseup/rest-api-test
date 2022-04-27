@@ -1,12 +1,10 @@
-
-
 const encodings = require("./../../node_modules/iconv-lite/encodings");
 const iconvLite = require("./../../node_modules/iconv-lite/lib");
 iconvLite.getCodec("UTF-8");
 
 const Server = require("../../lib/models/server");
 const myServer = new Server();
-const { app, paths, server } = myServer;
+const { app, paths } = myServer;
 const supertest = require("supertest");
 
 const db = require("../../lib/models/db");
@@ -54,15 +52,9 @@ jest.mock("../../lib/services/todo", () => {
   };
 });
 
-afterAll(() => {
-  // server.close();
-});
+afterEach(jest.clearAllMocks);
 
-beforeEach(() => {
-  jest.clearAllMocks();
-});
-
-describe("todo", () => {
+describe("/api/todo", () => {
   describe("get todo route", () => {
     describe("given the todo do not exist", () => {
       it("should return 404", async () => {

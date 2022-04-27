@@ -23,18 +23,23 @@ cp ejemplo.env .env       # Variables de entorno incluida NODE_ENV
 Para la creación local de la DB, debe estar asignada la siguiente variable `NODE_ENV=development`
 ```
 npm run db:migrate        # Crea la tabla to_do
-npm run db:seed           # Inserta 3 registros en la DB
+npm run db:seed           # Inserta 3 registros en la tabla to_do
 ```
 En el caso de utilizar `NODE_ENV=production`, se debe completar los datos en el `.env` para realizar la conexión a la DB
 
 ### Test scripts
 Todos usan jest
 ```
-npm run test              # Solo jest
-npm run test:w            # watch
-npm run test:o            # detectOpenHandles
-npm run test:v            # verbose
-npm run test:s            # silent
+
+npm t                     # no-verbose, no-coverage, silent
+npm run test              # no-verbose, no-coverage, silent
+npm run test:s            # silent, verbose, no-coverage
+npm run test:v            # verbose, no-silence, no-coverage
+npm run test:o            # detectOpenHandles, verbose, no-coverage
+npm run test:w            # watch, verbose, no-coverage
+npm run test:g            # verbose, only for git uncommitted changes
+npm run test:c            # coverage, silent, no-verbose
+npm run test:ci           # silent, coverage, update-snapshots
 ```
 
 ### Dev script
