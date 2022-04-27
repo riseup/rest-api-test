@@ -10,7 +10,7 @@ describe("app.js", () => {
           .spyOn(global.console, "log")
           .mockReturnValueOnce(mockObject);
         logging(mockObject);
-        expect(logSpy).toHaveBeenCalledWith([mockObject]);
+        expect(logSpy).toHaveBeenCalledWith(mockObject);
         logSpy.mockRestore();
       });
     });

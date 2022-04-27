@@ -12,7 +12,12 @@ const mockResponseHome = {
   docs: expect.any(String),
   docs_json: expect.any(String)
 };
-
+const mockNotFound = {
+  error: {
+    message: "ruta_no_existe",
+    status: 404
+  }
+};
 
 describe("/", () => {
   describe("get root route", () => {
@@ -28,14 +33,13 @@ describe("/", () => {
   });
 
   describe("get * route", () => {
-    describe("given the user input to a not found route", () => {
-      it("should return a 400 with an object ", async () => {
-        const { statusCode, body, headers } = await supertest(app).get(
-          `${paths.docsJson}`
-        );
-        expect(statusCode).toBe(200);
+    describe("given the user gets to a not found route", () => {
+      it("given a user gets a not found route ", async () => {
+        const { statusCode, body, headers } = await supertest(app).get("/abc");
+
+        expect(statusCode).toBe(404);
         expect(headers["content-type"]).toMatch(/application\/json/);
-        // expect(body).toBe(mockResponseHome);
+        expect(body).toEqual(mockNotFound);
       });
     });
   });
