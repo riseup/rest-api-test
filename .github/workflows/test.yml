@@ -26,10 +26,10 @@ jobs:
           cache: 'npm'
 
       - name: Migrate DB
-        run: npm db:migrate
+        run: npm run db:migrate
 
       - name: Seeds DB
-        run: npm db:seed
+        run: npm run db:seed
 
       - name: Test and Coverage
-        run: npm test:ci
+        run: npm run test:ci
