@@ -3,8 +3,8 @@ name: Jest Test
 on:
   push:
     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test-coverage:
@@ -26,7 +26,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm i
+        run: npm ci
         
       - name: Create .env file
         run: cp ejemplo.env .env
