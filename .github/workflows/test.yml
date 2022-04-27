@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm i
         
+      - name: Create .env file
+        run: cp ejemplo.env .env
+        
       - name: Migrate DB
         run: npm run db:migrate
 
