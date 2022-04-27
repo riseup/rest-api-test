@@ -1,4 +1,4 @@
-const { logging } = require("../../lib/config/db");
+const { logging } = require("../../../lib/config/db");
 
 const mockObject = { test: "hello mock" };
 
