@@ -2,35 +2,35 @@ name: Jest Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test-coverage:
     name: Test and Coverage
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Create .env file
         run: cp ejemplo.env .env
-        
+
       - name: Migrate DB
         run: npm run db:migrate
 
@@ -39,40 +39,23 @@ jobs:
 
       - name: Test and Coverage
         run: npm run test:ci
-        
-      # Only run the coverage once
+
+      # Asignamos el resultado del coverage en $GITHUB_ENV
+      # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
       - if: ${{ matrix.node-version == '14.x' }}
         name: Get Coverage for badge
         run: |
-          # var SUMMARY = [
-          #   '',
-          #   '=============================== Coverage summary ===============================',
-          #   'Statements   : 32.5% ( 39/120 )',
-          #   'Branches     : 38.89% ( 21/54 )',
-          #   'Functions    : 21.74% ( 5/23 )',
-          #   'Lines        : 31.93% ( 38/119 )',
-          #   '================================================================================',
-          #   ''
-          # ];
-          # SUMMARY = SUMMARY.split('\n')[5]; // 'Lines        : 31.93% ( 38/119 )'
-          # SUMMARY = SUMMARY.split(':')[1].split('(')[0].trim(); // '31.93%'
           SUMMARY="$(npm run test:ci -- --coverageReporters='text-summary' | tail -2 | head -1)"
           TOKENS=($SUMMARY)
-          # process.env.COVERAGE = '31.93%';
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
-
-          # var REF = 'refs/pull/27/merge.json';
           REF=${{ github.ref }}
-          # console.log('github.ref: ' + REF);
           echo "github.ref: $REF"
-          # var PATHS = REF.split('/');
           IFS='/' read -ra PATHS <<< "$REF"
-          # var BRANCH_NAME = PATHS[1] + '_' + PATHS[2];
           BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
-          # console.log(BRANCH_NAME); // 'pull_27'
           echo $BRANCH_NAME
-          # process.env.BRANCH = 'pull_27';
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+
+      # Crea un gist json con el resultado del coverage
       - if: ${{ matrix.node-version == '14.x' }}
         name: Create the Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
