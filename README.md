@@ -1,5 +1,8 @@
 
-![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/riseup/c4f7e821aa61df9b1acac1b7bd58719e/raw/rest-api-test__heads_main.json)
+![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/riseup/c4f7e821aa61df9b1acac1b7bd58719e/raw/rest-api-test__heads_main.json) ![Test passing](https://github.com/riseup/rest-api-test/actions/workflows/test.yml/badge.svg)
+
+
+
 # rest-api-test
 
 [API Demo](https://rest-api-test-01.herokuapp.com)
