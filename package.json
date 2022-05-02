@@ -1,6 +1,6 @@
 {
   "name": "rest-api-test",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "testing expressjs with jest and supertest",
   "main": "index.js",
   "repository": {
