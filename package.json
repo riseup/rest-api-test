@@ -29,7 +29,7 @@
     "test:w": "jest --watch --verbose",
     "test:g": "jest -o",
     "test:c": "jest --silent --coverage",
-    "test:ci": "jest --ci --coverage --silent"
+    "test:ci": "jest --ci --coverage --silent --coverageReporters='text-summary'"
   },
   "dependencies": {
     "cors": "^2.8.5",
