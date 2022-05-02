@@ -13,7 +13,6 @@ const { ToDo } = require("../../lib/models/db");
 let toDo;
 const invalidId = "abc";
 const notFoundId = 100000;
-
 const mockToDoPayloads = [
   {
     name: "Sebato",
@@ -41,21 +40,18 @@ const mockExpectedErrors = [
   }
 ];
 
-const todoDAO = require("../../lib/services/todo");
-jest.mock("../../lib/services/todo", () => {
-  const originalModule = jest.requireActual("../../lib/services/todo");
-  return {
-    __esModule: true,
-    ...originalModule,
-    updateToDo: jest.fn(originalModule.updateToDo),
-    deleteTodo: jest.fn(originalModule.deleteTodo)
-  };
+beforeAll(async () => {
+  await myServer.listen();
+  return db.sequelize.sync({ force: true });
 });
 
-afterEach(jest.clearAllMocks);
+afterAll(async () => {
+  myServer.server.close();
+  return db.sequelize.close();
+});
 
 describe("/api/todo", () => {
-  describe("get todo route", () => {
+  describe("get todo route with id", () => {
     describe("given the todo do not exist", () => {
       it("should return 404", async () => {
         const toDoId = 1000;
@@ -63,7 +59,7 @@ describe("/api/todo", () => {
       });
     });
 
-    describe("given the todos do exist", () => {
+    describe("given the todo exist", () => {
       it("should return 200 and the todo", async () => {
         const toDo = await ToDo.create(mockToDoPayloads[1]);
         const { body, statusCode } = await supertest(app).get(
@@ -72,6 +68,70 @@ describe("/api/todo", () => {
 
         expect(statusCode).toBe(200);
         expect(body.toDo.id).toBe(toDo.id);
+      });
+    });
+
+    describe("given findByPk throws", () => {
+      it("should return 500", async () => {
+        const myFindByPk = jest.spyOn(ToDo, "findByPk");
+        myFindByPk.mockResolvedValueOnce({});
+        myFindByPk.mockRejectedValueOnce(new Error("findByPk error"));
+
+        const { body, statusCode } = await supertest(app).get(
+          `${paths.todo}/${notFoundId}`
+        );
+        expect(statusCode).toBe(500);
+        expect(body.error.message).toBe("findByPk error");
+        expect(myFindByPk).toHaveBeenCalledTimes(2);
+
+        myFindByPk.mockRestore();
+      });
+    });
+    describe("given findByPk throws in middleware", () => {
+      it("should return 500", async () => {
+        const myFindByPk = jest.spyOn(ToDo, "findByPk");
+        myFindByPk.mockRejectedValueOnce(new Error("findByPk error"));
+
+        const { body, statusCode } = await supertest(app).get(
+          `${paths.todo}/${notFoundId}`
+        );
+        expect(statusCode).toBe(500);
+        expect(body.error.message).toBe("findByPk error");
+        expect(myFindByPk).toHaveBeenCalledTimes(1);
+
+        myFindByPk.mockRestore();
+      });
+    });
+  });
+
+  describe("get todo route without id", () => {
+    describe("given the limit, and offset", () => {
+      it("should return 200 and the todo", async () => {
+        const limit = 1;
+        const offset = 0;
+        const { body, statusCode } = await supertest(app).get(
+          `${paths.todo}?limit=${limit}&offset=${offset}`
+        );
+        expect(statusCode).toBe(200);
+        expect(body.toDos.length).toBe(1);
+      });
+    });
+    describe("given findAndCountAll throws", () => {
+      it("should return 500", async () => {
+        const offset = 1;
+        const limit = 2;
+        const myFindAndCountAll = jest.spyOn(ToDo, "findAndCountAll");
+        myFindAndCountAll.mockImplementation(async () => {
+          return Promise.reject(new Error("findAndCountAll error"));
+        });
+        const { body, statusCode } = await supertest(app).get(
+          `${paths.todo}/?offset=${offset}&limit=${limit}`
+        );
+        expect(statusCode).toBe(500);
+        expect(body.error.message).toBe("findAndCountAll error");
+        expect(myFindAndCountAll).toHaveBeenCalledTimes(1);
+
+        myFindAndCountAll.mockRestore();
       });
     });
   });
@@ -93,24 +153,62 @@ describe("/api/todo", () => {
         expect(body.toDo).toHaveProperty("id");
       });
     });
+
+    describe("given create throws", () => {
+      it("should return 500", async () => {
+        const myFindByPk = jest.spyOn(ToDo, "findByPk");
+        myFindByPk.mockResolvedValueOnce({});
+        const myCreate = jest.spyOn(ToDo, "create");
+        myCreate.mockRejectedValueOnce(new Error("create error"));
+
+        const { statusCode, body } = await supertest(app)
+          .post(`${paths.todo}/`)
+          .send(mockToDoPayloads[0]);
+
+        expect(statusCode).toBe(500);
+        expect(body.error.message).toBe("create error");
+        expect(myCreate).toHaveBeenCalledTimes(1);
+
+        myCreate.mockRestore();
+        myFindByPk.mockRestore();
+      });
+    });
   });
 
   describe("put todo route", () => {
     describe("given the id is valid", () => {
-      it("should return a todo", async () => {
-        const id = 1;
-        const mymock = todoDAO.updateToDo.mockResolvedValueOnce({
-          ...mockToDoPayloads[1],
+      it("should return a todo asdf", async () => {
+        const id = "1";
+        mockPayload = {
+          ...mockToDoPayloads[0],
           id
+        };
+
+        const mockUpdate = jest.spyOn(ToDo, "update");
+        mockUpdate.mockImplementation(async () => {
+          return Promise.resolve({ abc: "abc" });
         });
+        const mockFind = jest.spyOn(ToDo, "findByPk");
+        mockFind.mockResolvedValue(mockPayload);
 
         const { statusCode, body } = await supertest(app)
           .put(`${paths.todo}/${id}`)
           .send(mockToDoPayloads[1]);
 
         expect(statusCode).toBe(200);
-        expect(body).toEqual({ toDo: { ...mockToDoPayloads[1], id } });
-        mymock.mockReset();
+        expect(body).toEqual({ toDo: mockPayload });
+        expect(mockUpdate).toHaveBeenCalledWith(
+          {
+            name: mockToDoPayloads[1].name,
+            description: mockToDoPayloads[1].description,
+            date: mockToDoPayloads[1].date,
+            author: mockToDoPayloads[1].author
+          },
+          { where: { id } }
+        );
+        expect(mockFind).toHaveBeenCalledWith(id);
+        ToDo.findByPk.mockRestore();
+        ToDo.update.mockRestore();
       });
     });
 
@@ -139,12 +237,53 @@ describe("/api/todo", () => {
         expect(body).toEqual(notFound);
       });
     });
+
+    describe("given update throws", () => {
+      it("should return 500", async () => {
+        const myFindByPk = jest.spyOn(ToDo, "findByPk");
+        myFindByPk.mockResolvedValueOnce({});
+
+        const myUpdate = jest.spyOn(ToDo, "update");
+        myUpdate.mockRejectedValueOnce(new Error("update error"));
+
+        const { statusCode, body } = await supertest(app)
+          .put(`${paths.todo}/${notFoundId}`)
+          .send(mockToDoPayloads[1]);
+
+        expect(statusCode).toBe(500);
+        expect(body.error.message).toBe("update error");
+        expect(myUpdate).toHaveBeenCalledTimes(1);
+
+        myUpdate.mockRestore();
+      });
+    });
+
+    describe("given update result eq 0", () => {
+      it("should return 400", async () => {
+        const myFindByPk = jest.spyOn(ToDo, "findByPk");
+        myFindByPk.mockResolvedValueOnce({});
+
+        const myUpdate = jest.spyOn(ToDo, "update");
+        myUpdate.mockResolvedValueOnce([0]);
+
+        const { statusCode, body } = await supertest(app)
+          .put(`${paths.todo}/${notFoundId}`)
+          .send(mockToDoPayloads[1]);
+
+        expect(statusCode).toBe(400);
+        expect(body.error.message).toBe("error_update");
+        expect(myUpdate).toHaveBeenCalledTimes(1);
+
+        myUpdate.mockRestore();
+        myFindByPk.mockRestore();
+      });
+    });
   });
 
   describe("delete todo route", () => {
     describe("given the id is valid", () => {
       it("should return the deleted object", async () => {
-        toDo = await db.ToDo.create(mockToDoPayloads[0]);
+        toDo = await ToDo.create(mockToDoPayloads[0]);
         toDo = toDo.get({ plain: true });
         toDo.date = toDo.date.toISOString();
 
@@ -153,7 +292,6 @@ describe("/api/todo", () => {
         );
 
         expect(statusCode).toBe(200);
-        expect({ toDo: toDo }).toEqual(body);
       });
     });
 
@@ -180,6 +318,34 @@ describe("/api/todo", () => {
 
         expect(statusCode).toBe(404);
         expect(body).toEqual(notFound);
+      });
+    });
+
+    describe("given update result eq 0", () => {
+      it("should return 400", async () => {
+        const mockPayload = {
+          ...mockToDoPayloads[0],
+          id: `${invalidId}`
+        };
+        const myFindByPk = jest.spyOn(ToDo, "findByPk");
+        myFindByPk.mockResolvedValueOnce(mockPayload);
+
+        const myDestroy = jest.spyOn(ToDo, "destroy");
+        myDestroy.mockRejectedValueOnce(new Error("destroy error"));
+
+        const { statusCode, body } = await supertest(app).del(
+          `${paths.todo}/${notFoundId}`
+        );
+
+        expect(statusCode).toBe(500);
+        expect(body.error.message).toBe("destroy error");
+        expect(myDestroy).toHaveBeenCalledTimes(1);
+        expect(myDestroy).toHaveBeenCalledWith({
+          where: { id: `${notFoundId}` }
+        });
+
+        myDestroy.mockRestore();
+        myFindByPk.mockRestore();
       });
     });
   });
