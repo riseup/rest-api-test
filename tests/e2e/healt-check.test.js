@@ -1,13 +1,11 @@
-const supertest = require("supertest");
-const Server = require("../../lib/models/server");
-const myServer = new Server();
-const { app, paths } = myServer;
+const { getApi } = require("./helpers/server");
+const { api, paths } = getApi();
 
 describe("/healthcheck", () => {
   describe("get", () => {
     describe("given the call /healthcheck", () => {
       it("should return a json with 200 with ok", async () => {
-        const { statusCode, body, headers } = await supertest(app).get(
+        const { statusCode, body, headers } = await api.get(
           `${paths.healthCheck}`
         );
         expect(statusCode).toBe(200);
