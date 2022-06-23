@@ -1,14 +1,13 @@
-const supertest = require("supertest");
-const Server = require("../../lib/models/server");
-const myServer = new Server();
-const { app, paths } = myServer;
+const { getApi } = require("./helpers/server");
+const { api, paths } = getApi();
+
 const { version } = require("../../package.json");
 
 describe("/version", () => {
   describe("get", () => {
     describe("given the call /version", () => {
       it("should return with 200 and a json with version number", async () => {
-        const { statusCode, body, headers } = await supertest(app).get(
+        const { statusCode, body, headers } = await api.get(
           `${paths.version}`
         );
         expect(statusCode).toBe(200);
